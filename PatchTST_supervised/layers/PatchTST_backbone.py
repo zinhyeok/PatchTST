@@ -23,7 +23,7 @@ class PatchTST_backbone(nn.Module):
                  verbose:bool=False, **kwargs):
         
         super().__init__()
-        
+#Instance Norm + Patching        
         # RevIn
         self.revin = revin
         if self.revin: self.revin_layer = RevIN(c_in, affine=affine, subtract_last=subtract_last)
@@ -86,7 +86,10 @@ class PatchTST_backbone(nn.Module):
                     nn.Conv1d(head_nf, vars, 1)
                     )
 
-
+#model head부분 
+#individual=1, true인 경우: 각 변수에 대해 별도의 layer생성, flatten leinar dropout진행
+#최종 결과에 해당하는 부분
+#defualt가 0인데 sh에서 별 조작 없음 확인필요. run_long_EXP파일 확인
 class Flatten_Head(nn.Module):
     def __init__(self, individual, n_vars, nf, target_window, head_dropout=0):
         super().__init__()
@@ -197,7 +200,7 @@ class TSTEncoder(nn.Module):
             return output
 
 
-
+#Attention layer부분
 class TSTEncoderLayer(nn.Module):
     def __init__(self, q_len, d_model, n_heads, d_k=None, d_v=None, d_ff=256, store_attn=False,
                  norm='BatchNorm', attn_dropout=0, dropout=0., bias=True, activation="gelu", res_attention=False, pre_norm=False):
